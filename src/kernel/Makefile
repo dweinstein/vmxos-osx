@@ -10,7 +10,7 @@ all: main.o start.o
 start.o: start.asm
 	nasm -f aout start.asm -o start.o
 
-main.o: main.c main.h vmx/vmx.h console/console.h paging/paging.h A20/A20.h interrupt/interrupt.h
+main.o: main.c main.h vmx/vmx.h console/console.h paging/paging.h A20/A20.h interrupt/interrupt.h ../version.h ../build.h
 	gcc -ffreestanding -fno-builtin -nostdlib -c main.c
 
 clean:

@@ -146,3 +146,22 @@ char* bin2string(int val)
 	bin2string_buffer[32] = 0;
 	return bin2string_buffer;
 }
+
+char dec2string_buffer[32];
+// converts number into decimal format string
+char* dec2string(int val)
+{
+	int i = 1, b;
+	char s[32];
+	s[0] = 0;
+	while(val)
+	{
+		b = val % 10;
+		s[i++] = 48 + b;
+		val /= 10;
+	}
+	b = 0;
+	// reverse the string and copy to buffer
+	while((dec2string_buffer[b++] = s[--i]) && b < 32);
+	return dec2string_buffer;
+}

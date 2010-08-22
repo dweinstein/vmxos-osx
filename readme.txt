@@ -1,20 +1,20 @@
 ========================================================================
-    MAKEFILE PROJECT : vmos Project Overview
+    MAKEFILE PROJECT : vmxos Project Overview
 ========================================================================
 
-AppWizard has created this vmos project for you.  
+AppWizard has created this vmxos project for you.  
 
 This file contains a summary of what you will find in each of the files that
-make up your vmos project.
+make up your vmxos project.
 
 
-vmos.vcxproj
+vmxos.vcxproj
     This is the main project file for VC++ projects generated using an Application Wizard. 
     It contains information about the version of Visual C++ that generated the file, and 
     information about the platforms, configurations, and project features selected with the
     Application Wizard.
 
-vmos.vcxproj.filters
+vmxos.vcxproj.filters
     This is the filters file for VC++ projects generated using an Application Wizard. 
     It contains information about the association between the files in your project 
     and the filters. This association is used in the IDE to show grouping of files with

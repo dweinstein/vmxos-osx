@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6F48C9F9-6794-4D86-8D05-73CD66FEA87B}</ProjectGuid>
     <Keyword>MakeFileProj</Keyword>
+    <ProjectName>vmxos</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,7 +42,7 @@
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeBuildCommandLine>make</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>build</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>make clean</NMakeCleanCommandLine>
     <NMakePreprocessorDefinitions>
     </NMakePreprocessorDefinitions>
@@ -72,6 +73,7 @@
     <ClCompile Include="src\kernel\paging\paging.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\build.h" />
     <ClInclude Include="src\kernel\A20\A20.h" />
     <ClInclude Include="src\kernel\console\console.h" />
     <ClInclude Include="src\kernel\interrupt\interrupt.h" />
@@ -80,6 +82,7 @@
     <ClInclude Include="src\kernel\main.h" />
     <ClInclude Include="src\kernel\paging\paging.h" />
     <ClInclude Include="src\kernel\vmx\vmx.h" />
+    <ClInclude Include="src\version.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

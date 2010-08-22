@@ -17,6 +17,9 @@ extern char* hex2string(int val);
 // converts number into binary format string
 extern char* bin2string(int val);
 
+// converts number into decimal format string
+extern char* dec2string(int val);
+
 // scroll down screen
 extern void scroll();
 

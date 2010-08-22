@@ -3,9 +3,21 @@ _cpuid:
 	push ebx
 	push ecx
 	push edx
+	push edi
+
 	mov eax, 1
-	cpuid;
-	mov eax, ecx
+	cpuid
+
+	mov edi, [esp+20]
+	mov dword [edi], eax
+	add edi, 4
+	mov dword [edi], ebx
+	add edi, 4
+	mov dword [edi], ecx
+	add edi, 4
+	mov dword [edi], edx
+
+	pop edi
 	pop edx
 	pop ecx
 	pop ebx

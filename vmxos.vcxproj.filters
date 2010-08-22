@@ -89,5 +89,7 @@
     <ClInclude Include="src\kernel\main.h">
       <Filter>Source Files\kernel</Filter>
     </ClInclude>
+    <ClInclude Include="src\version.h" />
+    <ClInclude Include="src\build.h" />
   </ItemGroup>
 </Project>

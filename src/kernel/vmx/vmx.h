@@ -1,7 +1,7 @@
 #ifndef _VMX_H_
 #define _VMX_H_
 
-// processor feature flags
+// processor ECX
 typedef struct
 {
 	unsigned int b00_SSE3		:1;
@@ -36,6 +36,52 @@ typedef struct
 	unsigned int b29_res		:1;
 	unsigned int b30_res		:1;
 	unsigned int b31_res		:1;
+} CPUID_ECX_t;
+
+// processor EDX
+typedef struct
+{
+	unsigned int b00_FPU		:1;
+	unsigned int b01_VME		:1;
+	unsigned int b02_DE			:1;
+	unsigned int b03_PSE		:1;
+	unsigned int b04_TSC		:1;
+	unsigned int b05_MSR		:1;
+	unsigned int b06_PAE		:1;
+	unsigned int b07_MCE		:1;
+	unsigned int b08_CX8		:1;
+	unsigned int b09_APIC		:1;
+	unsigned int b10_res		:1;
+	unsigned int b11_SEP		:1;
+	unsigned int b12_MTRR		:1;
+	unsigned int b13_PGE		:1;
+	unsigned int b14_MCA		:1;
+	unsigned int b15_CMOV		:1;
+	unsigned int b16_PAT		:1;
+	unsigned int b17_PSE36		:1;
+	unsigned int b18_PSN		:1;
+	unsigned int b19_CLFL		:1;
+	unsigned int b20_res		:1;
+	unsigned int b21_DTES		:1;
+	unsigned int b22_ACPI		:1;
+	unsigned int b23_MMX		:1;
+	unsigned int b24_FXSR		:1;
+	unsigned int b25_SSE		:1;
+	unsigned int b26_SSE2		:1;
+	unsigned int b27_SS			:1;
+	unsigned int b28_HTT		:1;
+	unsigned int b29_TM1		:1;
+	unsigned int b30_IA_64		:1;
+	unsigned int b31_PBE		:1;
+} CPUID_EDX_t;
+
+// cpuid registers flags
+typedef struct
+{
+	unsigned int eax;	// processor type/family/model/stepping
+	unsigned int ebx;	// brand ID is encoded in bits 7...0
+	CPUID_ECX_t ecx;	// feature flags
+	CPUID_EDX_t edx;	// feature flags
 } CPUID_t;
 
 // control register cr0
@@ -125,7 +171,7 @@ typedef struct
 } EFLAGS_t;
 
 // get processor feature flags, ecx of cpuid leaf 1
-unsigned int cpuid();
+void cpuid(CPUID_t*);
 
 unsigned int vmx_read_cr0();
 unsigned int vmx_read_cr3();
