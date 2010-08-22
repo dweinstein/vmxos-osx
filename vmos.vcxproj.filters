@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\kernel">
+      <UniqueIdentifier>{e7a3fe9e-5cbe-42ed-88f3-cd563050b53e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\kernel\console">
+      <UniqueIdentifier>{40cd1f0a-b85e-4c89-b5f8-2170607d8d2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\boot">
+      <UniqueIdentifier>{35977820-3cda-4ad6-9ce8-a316cd4bf950}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\kernel\vmx">
+      <UniqueIdentifier>{9d0a0c68-9a08-4d14-b4e1-8b1916ae14c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\kernel\A20">
+      <UniqueIdentifier>{fc01f070-bc08-460e-ab11-efad0b94415f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\kernel\interrupt">
+      <UniqueIdentifier>{65016d35-c8ba-46f3-b73d-638d7b0e2748}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\kernel\io">
+      <UniqueIdentifier>{fbcdf79b-545c-4e3d-a8da-cc7a33b5a710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\kernel\paging">
+      <UniqueIdentifier>{60c21f97-9aed-4f08-802e-a8eb92f0f611}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\boot\boot.asm">
+      <Filter>Source Files\boot</Filter>
+    </None>
+    <None Include="src\kernel\A20\A20_hw.asm">
+      <Filter>Source Files\kernel\A20</Filter>
+    </None>
+    <None Include="src\kernel\vmx\vmx_hw.asm">
+      <Filter>Source Files\kernel\vmx</Filter>
+    </None>
+    <None Include="src\kernel\interrupt\interrupt_hw.asm">
+      <Filter>Source Files\kernel\interrupt</Filter>
+    </None>
+    <None Include="src\kernel\start.asm">
+      <Filter>Source Files\kernel</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\kernel\console\console.c">
+      <Filter>Source Files\kernel\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kernel\interrupt\interrupt.c">
+      <Filter>Source Files\kernel\interrupt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kernel\io\io.c">
+      <Filter>Source Files\kernel\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kernel\paging\paging.c">
+      <Filter>Source Files\kernel\paging</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kernel\main.c">
+      <Filter>Source Files\kernel</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\kernel\console\console.h">
+      <Filter>Source Files\kernel\console</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kernel\A20\A20.h">
+      <Filter>Source Files\kernel\A20</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kernel\vmx\vmx.h">
+      <Filter>Source Files\kernel\vmx</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kernel\interrupt\interrupt.h">
+      <Filter>Source Files\kernel\interrupt</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kernel\io\io.h">
+      <Filter>Source Files\kernel\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kernel\paging\paging.h">
+      <Filter>Source Files\kernel\paging</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kernel\kernel.h">
+      <Filter>Source Files\kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kernel\main.h">
+      <Filter>Source Files\kernel</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
