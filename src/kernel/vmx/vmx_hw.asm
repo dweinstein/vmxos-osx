@@ -30,6 +30,11 @@ _vmx_read_cr0:
 	mov eax, cr0
 	ret
 
+global _vmx_read_cr2
+_vmx_read_cr2:
+	mov eax, cr2
+	ret
+
 global _vmx_read_cr3
 _vmx_read_cr3:
 	mov eax, cr3
@@ -105,13 +110,14 @@ _vmx_write_msr:
 
  global _vmx_vmxon
  _vmx_vmxon:
-	vmxon [esp+4]
+	vmxon [esp+8]
 	jbe vmxon_failed
 	vmxon_pass:
 		mov eax, 1
 		jmp vmxon_done
 	vmxon_failed:
-		mov eax, 0
+		pushfd
+		popfd eax
 	vmxon_done:
 	ret
 

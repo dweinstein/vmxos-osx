@@ -186,6 +186,7 @@ extern unsigned int vmxon_rev_id;
 void cpuid(CPUID_t*);
 
 unsigned int vmx_read_cr0();
+unsigned int vmx_read_cr2();
 unsigned int vmx_read_cr3();
 unsigned int vmx_read_cr4();
 

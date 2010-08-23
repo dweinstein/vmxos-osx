@@ -5,38 +5,38 @@ IDT_t idt[256];
 
 char* exceptions[] = 
 {
-	"#00 Divide By Zero Error",
-	"#DB Debug Error",
-	"#-- NMI Interrupt",
-	"#BP Breakpoint",
-	"#OF Overflow",
-	"#BR BOUND Range Exceeded"
-	"#UD Invalid Opcode",
-	"#NM Device Not Available",
-	"#DF Double Fault",
-	"#-- Coprocessor Segment Overrun",
-	"#TS Invalid TSS",
-	"#NP Segment Not Present",
-	"#SS Stack Segment Fault",
-	"#GP Gneral Protection Fault",
-	"#PF Page Fault",
-	"#15 reserved",
-	"#MF FPU Floating-Point Exception",
-	"#AC Alignment Check",
-	"#MC Machine Check",
-	"#XF SIMD Floating-Point Exception",
-	"#20 reserved",
-	"#21 reserved",
-	"#22 reserved",
-	"#23 reserved",
-	"#24 reserved",
-	"#25 reserved",
-	"#26 reserved",
-	"#27 reserved",
-	"#28 reserved",
-	"#29 reserved",
-	"#SX Security Exception",
-	"#31 reserved",
+	"00 #00 Divide By Zero Error",
+	"01 #DB Debug Error",
+	"02 #-- NMI Interrupt",
+	"03 #BP Breakpoint",
+	"04 #OF Overflow",
+	"05 #BR BOUND Range Exceeded",
+	"06 #UD Invalid Opcode",
+	"07 #NM Device Not Available",
+	"08 #DF Double Fault",
+	"09 #-- Coprocessor Segment Overrun",
+	"10 #TS Invalid TSS",
+	"11 #NP Segment Not Present",
+	"12 #SS Stack Segment Fault",
+	"13 #GP Gneral Protection Fault",
+	"14 #PF Page Fault",
+	"15 #15 reserved",
+	"16 #MF FPU Floating-Point Exception",
+	"17 #AC Alignment Check",
+	"18 #MC Machine Check",
+	"19 #XF SIMD Floating-Point Exception",
+	"20 #20 reserved",
+	"21 #21 reserved",
+	"22 #22 reserved",
+	"23 #23 reserved",
+	"24 #24 reserved",
+	"25 #25 reserved",
+	"26 #26 reserved",
+	"27 #27 reserved",
+	"28 #28 reserved",
+	"29 #29 reserved",
+	"30 #SX Security Exception",
+	"31 #31 reserved",
 };
 
 void load_idtr()
@@ -164,12 +164,24 @@ void unmask_irq(unsigned char irq)
 
 void syscall_handler(unsigned int code)
 {
-	puts("syscall "); puts(hex2string(code));
+	puts("\nsyscall "); puts(hex2string(code));
 }
 
 void exception_handler(unsigned int code)
 {
-	puts(exceptions[code]);
+	puts("\n"); puts(dec2string(code)); puts(exceptions[code]);
+	hlt();
+}
+
+void exception_handler_err(unsigned int code, unsigned int err)
+{
+	puts("\n"); puts(exceptions[code]); puts(" -> error code: "); puts(bin2string(err));
+	switch(code)
+	{
+		case 14: // page fault
+			puts("\nCR2   : "); puts(hex2string(vmx_read_cr2())); puts(" = "); puts(bin2string(vmx_read_cr2())); puts("\n");
+			break;
+	}
 	hlt();
 }
 

@@ -21,7 +21,7 @@ void main()
 	puts("      : ECX -> "); puts(hex2string(UINT(cpu.ecx))); puts(" = "); puts(bin2string(UINT(cpu.ecx))); puts("\n");
 	puts("      : EDX -> "); puts(hex2string(UINT(cpu.edx))); puts(" = "); puts(bin2string(UINT(cpu.edx))); puts("\n");
 	puts("VMX   : "); puts(cpu.ecx.b05_VMX ? "supported\n" : "not supported\n");
-	puts("MSR   : "); puts(cpu.edx.b05_MSR ? "supported\n" : "not supported\n");
+	puts("MSR RW: "); puts(cpu.edx.b05_MSR ? "supported\n" : "not supported\n");
 
 	UINT(eflags) = vmx_read_eflags();
 	puts("EFLAGS: "); puts(hex2string(UINT(eflags))); puts(" = "); puts(bin2string(UINT(eflags))); puts("\n");
@@ -37,6 +37,7 @@ void main()
 	puts("Enabling paging "); enable_paging(); puts("[done]\n");
 	
 	puts("CR0   : "); puts(hex2string(vmx_read_cr0())); puts(" = "); puts(bin2string(vmx_read_cr0())); puts("\n");
+	puts("CR2   : "); puts(hex2string(vmx_read_cr2())); puts(" = "); puts(bin2string(vmx_read_cr2())); puts("\n");
 	puts("CR3   : "); puts(hex2string(vmx_read_cr3())); puts(" = "); puts(bin2string(vmx_read_cr3())); puts("\n");
 	puts("CR4   : "); puts(hex2string(vmx_read_cr4())); puts(" = "); puts(bin2string(vmx_read_cr4())); puts("\n");
 
@@ -45,20 +46,33 @@ void main()
 	//unmask_irq(IRQ_KEYBOARD);
 	puts("Inizializing interrupt handlers "); init_exceptions(); puts("[done]\n");
 	sti();
+	
 	//invoke48();
 	
 	unsigned long long nl = 0;
+	vmx_read_msr(0x3A, &nl);
+	nl |= 1;
+	vmx_write_msr(0x3A, &nl);
+	puts("MSR lock "); puts(bin2string(nl)); puts("\n");
+
 	vmx_read_msr(0x480, &nl);
 	vmxon_rev_id = nl;
 
 	int i;
 	unsigned int* reg = (unsigned int*)0x9F000;
-	for(i = 0; i < 1024; i++) reg[i] = 0;
+	for(i = 0; i < 2024; i++) reg[i] = 0;
 	reg[0] = vmxon_rev_id;
 
-	puts("VMX Revision ID: "); puts(hex2string(nl)); puts("\n");
-	puts("VMX Rregion address: "); puts(hex2string(*reg)); puts("\n");
-	//puts("Entering vmx root mode "); puts(vmx_vmxon((unsigned long long*)reg) ? "success\n" : "failed\n");
+	UINT(eflags) = vmx_read_eflags();
+	puts("EFLAGS: "); puts(hex2string(UINT(eflags))); puts(" = "); puts(bin2string(UINT(eflags))); puts("\n");
+
+	puts("VMX revision ID: "); puts(hex2string(nl));
+	puts(" - "); puts("region address: "); puts(hex2string((unsigned int)reg)); puts("\n");
+
+	unsigned int res = vmx_vmxon((unsigned long long*)reg);
+	puts("Entering vmx root mode "); puts(res == 1 ? "success\n" : "failed\n");
+	
+	puts("EFLAGS: "); puts(hex2string(UINT(res))); puts(" = "); puts(bin2string(UINT(res))); puts("\n");
 	//i=3/0;
 	//unsigned int * region = (unsigned int *)allocate_4k_aligned(4096);
 	//unsigned long long region64 = (unsigned long long)((unsigned int)(region) & 0xFFFFFFFF);

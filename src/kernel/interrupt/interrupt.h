@@ -1,9 +1,10 @@
 #ifndef _INTERRUPT_H_
 #define _INTERRUPT_H_
 
+#include "../kernel.h"
 #include "../console/console.h"
 #include "../io/io.h"
-#include "../kernel.h"
+#include "../vmx/vmx.h";
 
 // interrupt types
 #define INT_0 0x8E00	// 1000111000000000 = present, ring0, int_gate
@@ -73,6 +74,7 @@ typedef struct
 // interrupt handlers
 void syscall_handler(unsigned int);
 void exception_handler(unsigned int);
+void exception_handler_err(unsigned int, unsigned int);
 void hwint_handler();
 
 extern void init_exceptions();
