@@ -120,3 +120,33 @@ _vmx_vmxon:
 		mov eax, 0
 	vmxon_done:
 	ret
+
+;; VMPTRLD
+
+extern _vmcs_ptr
+
+global _vmx_vmptrld
+_vmx_vmptrld:
+	vmptrld [_vmcs_ptr]
+	jbe vmptrld_failed
+	vmptrld_pass:
+		mov eax, 1
+		jmp vmptrld_done
+	vmptrld_failed:
+		mov eax, 0
+	vmptrld_done:
+	ret
+
+;; VMPTRLD
+
+global _vmx_vmclear
+_vmx_vmclear:
+	vmclear [_vmcs_ptr]
+	jbe vmclear_failed
+	vmclear_pass:
+		mov eax, 1
+		jmp vmclear_done
+	vmclear_failed:
+		mov eax, 0
+	vmclear_done:
+	ret

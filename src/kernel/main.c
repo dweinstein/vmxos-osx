@@ -53,24 +53,32 @@ void main()
 	
 	unsigned long long nl = 0;
 	vmx_read_msr(0x3A, &nl);
-	nl |= 1;
+	nl |= 1; // set bit 0
 	vmx_write_msr(0x3A, &nl);
 	puts("MSR 0x3A locked -> "); puts(bin2string(nl)); puts("\n");
 
 	vmx_read_msr(0x480, &nl);
-	vmxon_rev_id = 45454;
-	vmxon_ptr = 0x9F000;
+	vmxon_ptr = 0x9E000;
+	vmcs_ptr = 0x9F000;
 
 	int i;
-	unsigned int* reg = (unsigned int*)0x9F000;
+	unsigned int* reg;
+	
+	reg = (unsigned int*)vmxon_ptr;
+	for(i = 0; i < 1024; i++) reg[i] = 0;
+	reg[0] = nl;
+	
+	reg = (unsigned int*)vmcs_ptr;
 	for(i = 0; i < 1024; i++) reg[i] = 0;
 	reg[0] = nl;
 
-	puts("VMX revision ID: "); puts(hex2string(*reg));
-	puts(" - "); puts("region address: "); puts(hex2string((unsigned int)reg)); puts("\n");
+	puts("VMX revID: "); puts(hex2string(*reg));
+	puts(" - "); puts("vmx region at: "); puts(hex2string(vmxon_ptr));
+	puts(" - "); puts("vmcs region at: "); puts(hex2string(vmcs_ptr)); puts("\n");
 
-	unsigned int res = vmx_vmxon();
-	puts("Entering vmx root mode "); puts(res == 1 ? "success\n" : "failed\n");
+	puts("Entering vmx root mode "); puts(vmx_vmxon() ? "success\n" : "failed\n");
+	puts("Clearing VMCS region "); puts(vmx_vmclear() ? "success\n" : "failed\n");
+	puts("Loading VMCS pointer "); puts(vmx_vmptrld() ? "success\n" : "failed\n");
 	
 	puts("Type something: ");
 

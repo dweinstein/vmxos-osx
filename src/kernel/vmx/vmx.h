@@ -175,7 +175,7 @@ typedef struct
  ************************/
 // vmxon data
 extern unsigned long long vmxon_ptr;
-extern unsigned int vmxon_rev_id;
+extern unsigned long long vmcs_ptr;
 
 
 /************************
@@ -201,6 +201,8 @@ void vmx_read_msr(unsigned int msr, unsigned long long* value);
 void vmx_write_msr(unsigned int msr, unsigned long long* value);
 
 // enter in vmx hypervisor mode, return true if we are in vmx root mode, otherwise false 
-extern unsigned char vmx_vmxon();
+extern unsigned int vmx_vmxon();
+extern unsigned int vmx_vmptrld();
+extern unsigned int vmx_vmclear();
 
 #endif

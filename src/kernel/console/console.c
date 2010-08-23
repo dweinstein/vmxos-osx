@@ -75,7 +75,7 @@ void move_cursor()
 void scroll()
 {
 	unsigned short attrib = (console_backcolour << 4) | (console_forecolour & 0x0F);
-	unsigned short *vidmem = (unsigned short*)0xB8000;
+	unsigned short *vidmem = (unsigned short*)0xB8000 + console_w;
 	unsigned short *max = (unsigned short*)0xB8000 + (console_w * (console_h - 1));
 	while(vidmem < max)
 	{
