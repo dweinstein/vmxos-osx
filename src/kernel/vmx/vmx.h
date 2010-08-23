@@ -201,6 +201,6 @@ void vmx_read_msr(unsigned int msr, unsigned long long* value);
 void vmx_write_msr(unsigned int msr, unsigned long long* value);
 
 // enter in vmx hypervisor mode, return true if we are in vmx root mode, otherwise false 
-extern unsigned char vmx_vmxon(unsigned long long*);
+extern unsigned char vmx_vmxon();
 
 #endif

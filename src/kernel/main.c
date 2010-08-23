@@ -6,12 +6,14 @@ void main()
 	CR4_t cr4;
 	CR0_t cr0;
 	EFLAGS_t eflags;
-	unsigned int a20 = check_A20();
+	unsigned int a20;
 
 	cls();
 	puts("Welcome to VMXOS "); puts(vmxos_version); puts(" build "); puts(dec2string(vmxos_build)); puts("\n");
 	puts("Inizialising the kernel modules\n\n");
 
+	//disable_A20();
+	a20 = check_A20();
 	puts("A20   : "); puts(a20 ? "enabled\n" : "not enabled\n");
 	if (!a20) { puts("enabling A20 gate "); enable_A20(); puts("[done]\n"); }
 
@@ -53,31 +55,23 @@ void main()
 	vmx_read_msr(0x3A, &nl);
 	nl |= 1;
 	vmx_write_msr(0x3A, &nl);
-	puts("MSR lock "); puts(bin2string(nl)); puts("\n");
+	puts("MSR 0x3A locked -> "); puts(bin2string(nl)); puts("\n");
 
 	vmx_read_msr(0x480, &nl);
-	vmxon_rev_id = nl;
+	vmxon_rev_id = 45454;
+	vmxon_ptr = 0x9F000;
 
 	int i;
 	unsigned int* reg = (unsigned int*)0x9F000;
-	for(i = 0; i < 2024; i++) reg[i] = 0;
-	reg[0] = vmxon_rev_id;
+	for(i = 0; i < 1024; i++) reg[i] = 0;
+	reg[0] = nl;
 
-	UINT(eflags) = vmx_read_eflags();
-	puts("EFLAGS: "); puts(hex2string(UINT(eflags))); puts(" = "); puts(bin2string(UINT(eflags))); puts("\n");
-
-	puts("VMX revision ID: "); puts(hex2string(nl));
+	puts("VMX revision ID: "); puts(hex2string(*reg));
 	puts(" - "); puts("region address: "); puts(hex2string((unsigned int)reg)); puts("\n");
 
-	unsigned int res = vmx_vmxon((unsigned long long*)reg);
+	unsigned int res = vmx_vmxon();
 	puts("Entering vmx root mode "); puts(res == 1 ? "success\n" : "failed\n");
 	
-	puts("EFLAGS: "); puts(hex2string(UINT(res))); puts(" = "); puts(bin2string(UINT(res))); puts("\n");
-	//i=3/0;
-	//unsigned int * region = (unsigned int *)allocate_4k_aligned(4096);
-	//unsigned long long region64 = (unsigned long long)((unsigned int)(region) & 0xFFFFFFFF);
-	//asm volatile("  vmxon %0; "::"m" (region64));
-
 	puts("Type something: ");
 
 	while(1);

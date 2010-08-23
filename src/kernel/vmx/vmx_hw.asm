@@ -108,22 +108,15 @@ _vmx_write_msr:
 
 ;; VMXON
 
- global _vmx_vmxon
- _vmx_vmxon:
-	vmxon [esp+8]
+extern _vmxon_ptr
+global _vmx_vmxon
+_vmx_vmxon:
+	vmxon [_vmxon_ptr]
 	jbe vmxon_failed
 	vmxon_pass:
 		mov eax, 1
 		jmp vmxon_done
 	vmxon_failed:
-		pushfd
-		popfd eax
+		mov eax, 0
 	vmxon_done:
 	ret
-
-;; VMX DATA
-
-global _vmxon_ptr
-global _vmxon_rev_id
-_vmxon_ptr dq _vmxon_rev_id
-_vmxon_rev_id: 

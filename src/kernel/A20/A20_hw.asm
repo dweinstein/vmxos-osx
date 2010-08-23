@@ -21,7 +21,41 @@ _enable_A20:
 
     pop eax
     or al, 2			; set bit 1 (enable a20)
-    out 0x60,al			; write out data back to the output port
+    out 0x60, al			; write out data back to the output port
+
+    call wait_input
+    mov al, 0xAE		; enable keyboard
+    out 0x64, al
+
+    call wait_input
+	popa
+    ; sti				;; NOTE: enable this only when interrupt is handled, else will lead in triple fault
+    ret
+
+global _disable_A20
+_disable_A20:
+	cli
+	pusha
+    call wait_input
+    mov al, 0xAD
+    out 0x64, al		; disable keyboard
+    call wait_input
+
+    mov al,0xD0
+    out 0x64, al		; tell controller to read output port
+    call wait_output
+
+    in al, 0x60
+    push eax			; get output port data and store it
+    call wait_input
+
+    mov al,0xD1
+    out 0x64, al		; tell controller to write output port
+    call wait_input
+
+    pop eax
+    and al, 0xFD		; reset bit 1 (disable a20)
+    out 0x60, al			; write out data back to the output port
 
     call wait_input
     mov al, 0xAE		; enable keyboard
