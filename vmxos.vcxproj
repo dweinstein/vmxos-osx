@@ -71,6 +71,7 @@
     <ClCompile Include="src\kernel\io\io.c" />
     <ClCompile Include="src\kernel\main.c" />
     <ClCompile Include="src\kernel\paging\paging.c" />
+    <ClCompile Include="src\kernel\vmx\vmx.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\build.h" />

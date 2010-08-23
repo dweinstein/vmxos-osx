@@ -63,6 +63,9 @@
     <ClCompile Include="src\kernel\main.c">
       <Filter>Source Files\kernel</Filter>
     </ClCompile>
+    <ClCompile Include="src\kernel\vmx\vmx.c">
+      <Filter>Source Files\kernel\vmx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\kernel\console\console.h">

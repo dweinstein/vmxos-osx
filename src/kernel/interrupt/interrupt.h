@@ -3,10 +3,11 @@
 
 #include "../console/console.h"
 #include "../io/io.h"
+#include "../kernel.h"
 
 // interrupt types
-#define INT_0 0x8E00						// 1000111000000000 = present, ring0, int_gate
-#define INT_3 0xEE00						// 1110111000000000 = present, ring3, int_gate
+#define INT_0 0x8E00	// 1000111000000000 = present, ring0, int_gate
+#define INT_3 0xEE00	// 1110111000000000 = present, ring3, int_gate
 
 /*
  * IRQ macros
@@ -69,9 +70,10 @@ typedef struct
      unsigned int base;			            // a pointer to the base of the IDT 
 } __attribute__ ((packed)) IDTR_t;
 
-extern void generic_int();
-extern void int48();
-extern void generic_pic();
+// interrupt handlers
+void syscall_handler(unsigned int);
+void exception_handler(unsigned int);
+void hwint_handler();
 
 extern void init_exceptions();
 extern void invoke48();
@@ -84,5 +86,43 @@ extern void unmask_irq(unsigned char irq);
 // cli e sti
 extern void cli();
 extern void sti();
+
+// interrupt gates
+extern void int0();
+extern void int1();
+extern void int2();
+extern void int3();
+extern void int4();
+extern void int5();
+extern void int6();
+extern void int7();
+extern void int8();
+extern void int9();
+extern void int10();
+extern void int11();
+extern void int12();
+extern void int13();
+extern void int14();
+extern void int15();
+extern void int16();
+extern void int17();
+extern void int17();
+extern void int18();
+extern void int19();
+extern void int20();
+extern void int21();
+extern void int22();
+extern void int23();
+extern void int24();
+extern void int25();
+extern void int26();
+extern void int27();
+extern void int28();
+extern void int29();
+extern void int30();
+extern void int31();
+
+extern void int48();
+extern void hwint();
 
 #endif

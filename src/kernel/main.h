@@ -10,7 +10,4 @@
 #include "A20\A20.h"
 #include "interrupt\interrupt.h"
 
-// hlt defined in start.asm
-extern void hlt();
-
 #endif

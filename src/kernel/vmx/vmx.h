@@ -170,6 +170,18 @@ typedef struct
 	unsigned int b22_zero		:10;
 } EFLAGS_t;
 
+/************************
+ * GLOBALS VARIABLES
+ ************************/
+// vmxon data
+extern unsigned long long vmxon_ptr;
+extern unsigned int vmxon_rev_id;
+
+
+/************************
+ * FUNCTION PROTOTYPES
+ ************************/
+
 // get processor feature flags, ecx of cpuid leaf 1
 void cpuid(CPUID_t*);
 
@@ -183,5 +195,11 @@ void vmx_write_cr4(unsigned int);
 
 unsigned int vmx_read_eflags();
 void vmx_write_eflags(unsigned int);
+
+void vmx_read_msr(unsigned int msr, unsigned long long* value);
+void vmx_write_msr(unsigned int msr, unsigned long long* value);
+
+// enter in vmx hypervisor mode, return true if we are in vmx root mode, otherwise false 
+extern unsigned char vmx_vmxon(unsigned long long*);
 
 #endif

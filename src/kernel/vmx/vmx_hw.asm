@@ -60,6 +60,8 @@ _vmx_write_cr4:
 	mov cr4, eax
 	ret
 
+;; READ/WRITE EFLAGS REGISTER
+
 global _vmx_read_eflags
 _vmx_read_eflags:
 	pushfd
@@ -72,3 +74,50 @@ _vmx_write_eflags:
 	push eax
 	popfd
 	ret
+
+;; READ/WRITE MSR
+
+global _vmx_read_msr
+_vmx_read_msr:
+	pushad
+	mov ecx, [esp+36]
+	rdmsr
+	mov ecx, [esp+40]
+	mov dword [ecx], eax
+	add ecx, 4
+	mov dword [ecx], edx
+	popad
+	ret
+
+global _vmx_write_msr
+_vmx_write_msr:
+	pushad
+	mov ecx, [esp+36]
+	mov ebx, [esp+40]
+	mov dword eax, [ebx]
+	add ebx, 4
+	mov dword edx, [ebx]
+	wrmsr
+	popad
+	ret
+
+;; VMXON
+
+ global _vmx_vmxon
+ _vmx_vmxon:
+	vmxon [esp+4]
+	jbe vmxon_failed
+	vmxon_pass:
+		mov eax, 1
+		jmp vmxon_done
+	vmxon_failed:
+		mov eax, 0
+	vmxon_done:
+	ret
+
+;; VMX DATA
+
+global _vmxon_ptr
+global _vmxon_rev_id
+_vmxon_ptr dq _vmxon_rev_id
+_vmxon_rev_id: 

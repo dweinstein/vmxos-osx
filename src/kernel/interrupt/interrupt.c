@@ -3,6 +3,42 @@
 IDTR_t idtr;
 IDT_t idt[256];
 
+char* exceptions[] = 
+{
+	"#00 Divide By Zero Error",
+	"#DB Debug Error",
+	"#-- NMI Interrupt",
+	"#BP Breakpoint",
+	"#OF Overflow",
+	"#BR BOUND Range Exceeded"
+	"#UD Invalid Opcode",
+	"#NM Device Not Available",
+	"#DF Double Fault",
+	"#-- Coprocessor Segment Overrun",
+	"#TS Invalid TSS",
+	"#NP Segment Not Present",
+	"#SS Stack Segment Fault",
+	"#GP Gneral Protection Fault",
+	"#PF Page Fault",
+	"#15 reserved",
+	"#MF FPU Floating-Point Exception",
+	"#AC Alignment Check",
+	"#MC Machine Check",
+	"#XF SIMD Floating-Point Exception",
+	"#20 reserved",
+	"#21 reserved",
+	"#22 reserved",
+	"#23 reserved",
+	"#24 reserved",
+	"#25 reserved",
+	"#26 reserved",
+	"#27 reserved",
+	"#28 reserved",
+	"#29 reserved",
+	"#SX Security Exception",
+	"#31 reserved",
+};
+
 void load_idtr()
 {
     idtr.limit  = 256*(sizeof(IDT_t)-1);
@@ -27,9 +63,42 @@ void init_exceptions()
 	int i = 0;
 	
 	// add all Exception Interrupts
-	for (; i < 32; i++) set_gate(i, generic_int);
-	for (; i < 48; i++) set_gate(i, generic_pic);
+	set_gate(0, int0);
+	set_gate(1, int1);
+	set_gate(2, int2);
+	set_gate(3, int3);
+	set_gate(4, int4);
+	set_gate(5, int5);
+	set_gate(6, int6);
+	set_gate(7, int7);
+	set_gate(8, int8);
+	set_gate(9, int9);
+	set_gate(10, int10);
+	set_gate(11, int11);
+	set_gate(12, int12);
+	set_gate(13, int13);
+	set_gate(14, int14);
+	set_gate(15, int15);
+	set_gate(16, int16);
+	set_gate(17, int17);
+	set_gate(18, int18);
+	set_gate(19, int19);
+	set_gate(20, int20);
+	set_gate(21, int21);
+	set_gate(22, int22);
+	set_gate(23, int23);
+	set_gate(24, int24);
+	set_gate(25, int25);
+	set_gate(26, int26);
+	set_gate(27, int27);
+	set_gate(28, int28);
+	set_gate(29, int29);
+	set_gate(30, int30);
+	set_gate(31, int31);
+	i=32;
+	for (; i < 48; i++) set_gate(i, hwint);
 	set_gate(48, int48);
+
 	load_idtr();
 }
 
@@ -93,19 +162,18 @@ void unmask_irq(unsigned char irq)
 	}
 }
 
-void int_48()
+void syscall_handler(unsigned int code)
 {
-	puts("int40");
+	puts("syscall "); puts(hex2string(code));
 }
 
-void generic_int_handler()
+void exception_handler(unsigned int code)
 {
-	puts("int");
-	outportb(PIC_MASTER, PIC_EOI);
-	sti();
+	puts(exceptions[code]);
+	hlt();
 }
 
-void generic_pic_handler()
+void hwint_handler()
 {
     unsigned char scancode;
 	char s[2];
@@ -122,22 +190,9 @@ void generic_pic_handler()
     }
     else
     {
-        /* Here, a key was just pressed. Please note that if you
-        *  hold a key down, you will get repeated key press
-        *  interrupts. */
-
-        /* Just to show you how this works, we simply translate
-        *  the keyboard scancode into an ASCII value, and then
-        *  display it to the screen. You can get creative and
-        *  use some flags to see if a shift is pressed and use a
-        *  different layout, or you can add another 128 entries
-        *  to the above layout to correspond to 'shift' being
-        *  held. If shift is held using the larger lookup table,
-        *  you would add 128 to the scancode when you look for it */
 		s[0] = kbdus[scancode];
 		s[1] = 0;
         puts(s);
     }
 	outportb(PIC_MASTER, PIC_EOI);
-	sti();
 }
