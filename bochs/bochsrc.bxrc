@@ -15,7 +15,8 @@ floppyb: 1_44=floppyb.img, status=inserted
 
 # hard disk
 #ata0-master: type=disk, path="minix3slab.img"
-ata0-master: type=cdrom, path="minix3_1_8_ide_r7674.iso", status=inserted
+#ata0-master: type=cdrom, path="minix3_1_8_ide_r7674.iso", status=inserted
+#ata0-master: type=disk, path=floppy.img, status=inserted
 
 # choose the boot disk.
 boot: floppy
