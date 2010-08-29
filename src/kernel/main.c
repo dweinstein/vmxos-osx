@@ -11,7 +11,7 @@ void main()
 	cls();
 	puts("Welcome to VMXOS "); puts(vmxos_version); puts(" build "); puts(dec2string(vmxos_build)); puts("\n");
 	puts("Inizialising the kernel modules\n\n");
-
+	
 	//disable_A20();
 	a20 = check_A20();
 	puts("A20   : "); puts(a20 ? "enabled\n" : "not enabled\n");
@@ -24,6 +24,7 @@ void main()
 	puts("      : EDX -> "); puts(hex2string(UINT(cpu.edx))); puts(" = "); puts(bin2string(UINT(cpu.edx))); puts("\n");
 	puts("VMX   : "); puts(cpu.ecx.b05_VMX ? "supported\n" : "not supported\n");
 	puts("MSR RW: "); puts(cpu.edx.b05_MSR ? "supported\n" : "not supported\n");
+	if (!cpu.ecx.b05_VMX) return;
 
 	UINT(eflags) = vmx_read_eflags();
 	puts("EFLAGS: "); puts(hex2string(UINT(eflags))); puts(" = "); puts(bin2string(UINT(eflags))); puts("\n");

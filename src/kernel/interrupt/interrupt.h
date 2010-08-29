@@ -4,7 +4,7 @@
 #include "../kernel.h"
 #include "../console/console.h"
 #include "../io/io.h"
-#include "../vmx/vmx.h";
+#include "../vmx/vmx.h"
 
 // interrupt types
 #define INT_0 0x8E00	// 1000111000000000 = present, ring0, int_gate

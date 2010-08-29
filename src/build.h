@@ -2,6 +2,6 @@
 #define _BUILD_H_
 
 int vmxos_build = 
-203;
+352;
 
 #endif

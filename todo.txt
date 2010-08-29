@@ -1,0 +1,1 @@
+[ ] Add: Bios Parameter Block and format the image to FAT.

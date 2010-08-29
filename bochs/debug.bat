@@ -1,0 +1,1 @@
+debugger\bochsdbg.exe -f bochsrc.bxrc -q
