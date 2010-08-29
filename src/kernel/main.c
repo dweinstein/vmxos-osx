@@ -12,10 +12,23 @@ void main()
 	puts("Welcome to VMXOS "); puts(vmxos_version); puts(" build "); puts(dec2string(vmxos_build)); puts("\n");
 	puts("Inizialising the kernel modules\n\n");
 	
-	//disable_A20();
+	disable_A20();
 	a20 = check_A20();
-	puts("A20   : "); puts(a20 ? "enabled\n" : "not enabled\n");
-	if (!a20) { puts("enabling A20 gate "); enable_A20(); puts("[done]\n"); }
+	puts("A20   : "); puts(a20 ? "enabled\n" : "not enabled -> ");
+	if (!a20) 
+	{ 
+		puts("enabling A20 gate... "); 
+		enable_A20();
+		if (check_A20())
+		{
+			puts("successed\n"); 
+		}
+		else 
+		{
+			puts("failed\n"); 
+			return;
+		}
+	}
 
 	cpuid(&cpu);
 	puts("CPUID : EAX -> "); puts(hex2string(cpu.eax)); puts(" = "); puts(bin2string(cpu.eax)); puts("\n");
@@ -24,7 +37,7 @@ void main()
 	puts("      : EDX -> "); puts(hex2string(UINT(cpu.edx))); puts(" = "); puts(bin2string(UINT(cpu.edx))); puts("\n");
 	puts("VMX   : "); puts(cpu.ecx.b05_VMX ? "supported\n" : "not supported\n");
 	puts("MSR RW: "); puts(cpu.edx.b05_MSR ? "supported\n" : "not supported\n");
-	if (!cpu.ecx.b05_VMX) return;
+	if (!cpu.ecx.b05_VMX || !cpu.edx.b05_MSR) return;
 
 	UINT(eflags) = vmx_read_eflags();
 	puts("EFLAGS: "); puts(hex2string(UINT(eflags))); puts(" = "); puts(bin2string(UINT(eflags))); puts("\n");
@@ -53,10 +66,20 @@ void main()
 	//invoke48();
 	
 	unsigned long long nl = 0;
+	puts("Reading MSR 0xA3");
 	vmx_read_msr(0x3A, &nl);
-	nl |= 1; // set bit 0
-	vmx_write_msr(0x3A, &nl);
-	puts("MSR 0x3A locked -> "); puts(bin2string(nl)); puts("\n");
+	puts(" -> "); puts(bin2string(nl)); puts("\n");
+	if (!(nl & 1))
+	{
+		puts("Locking MSR...\n");
+		nl |= 1; // set bit 0
+		vmx_write_msr(0x3A, &nl);
+		puts("MSR 0x3A locked -> "); puts(bin2string(nl)); puts("\n");
+	}
+	else
+	{
+		puts("MSR 0x3A already locked\n");
+	}
 
 	vmx_read_msr(0x480, &nl);
 	vmxon_ptr = 0x9E000;
