@@ -121,6 +121,13 @@ _vmx_vmxon:
 	vmxon_done:
 	ret
 
+;; VMXOFF
+
+global _vmx_vmxoff
+_vmx_vmxoff:
+	vmxoff
+	ret
+
 ;; VMPTRLD
 
 extern _vmcs_ptr
@@ -149,4 +156,20 @@ _vmx_vmclear:
 	vmclear_failed:
 		mov eax, 0
 	vmclear_done:
+	ret
+
+; VMREAD/VMWRITE
+
+; void vmv_vmwrite(unsigned int field, unsigned int value)
+global _vmx_vmwrite
+_vmx_vmwrite:
+	mov eax, [esp+4]
+	vmwrite eax, [esp+8]
+	ret
+
+; unsigned int vmv_vmread(unsigned int field)
+global _vmx_vmread
+_vmx_vmread:
+	mov eax, [esp+4]
+	vmread eax, eax
 	ret

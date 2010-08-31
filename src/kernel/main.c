@@ -100,9 +100,15 @@ void main()
 	puts(" - "); puts("vmx region at: "); puts(hex2string(vmxon_ptr));
 	puts(" - "); puts("vmcs region at: "); puts(hex2string(vmcs_ptr)); puts("\n");
 
-	puts("Entering vmx root mode "); puts(vmx_vmxon() ? "success\n" : "failed\n");
+	puts("Entering VMX mode "); puts(vmx_vmxon() ? "success\n" : "failed\n");
 	puts("Clearing VMCS region "); puts(vmx_vmclear() ? "success\n" : "failed\n");
 	puts("Loading VMCS pointer "); puts(vmx_vmptrld() ? "success\n" : "failed\n");
+
+	puts("Guest_CR0 original: "); puts(hex2string(vmx_vmread(Guest_CR0))); puts("\n");
+	puts("Writing Guest_CR0..."); vmx_vmwrite(Guest_CR0, 0xFF00); puts("done\n");
+	puts("Guest_CR0 modified: "); puts(hex2string(vmx_vmread(Guest_CR0))); puts("\n");
+
+	puts("Leaving VMX mode "); puts(vmx_vmxoff() ? "success\n" : "failed\n");
 	
 	puts("Type something: ");
 
