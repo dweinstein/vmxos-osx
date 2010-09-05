@@ -318,7 +318,12 @@ vmx_vmwrite(Guest_RIP, guest_entry);
 vmx_vmwrite(Host_RSP, 0x90000);
 vmx_vmwrite(Host_RIP, host_entry);
 
-if (!vmx_vmlaunch()) puts("IMPOSSIBILE LANCIARE LA VM\n");
+	if (!vmx_vmlaunch())
+	{
+		puts("IMPOSSIBILE LANCIARE LA VM\nError #"); 
+		puts(vmx_instruction_errors[vmx_vmread(VM_instruction_error)]); 
+		puts("\n");
+	}
 
 	puts("Leaving VMX mode "); puts(vmx_vmxoff() ? "success\n" : "failed\n");
 	

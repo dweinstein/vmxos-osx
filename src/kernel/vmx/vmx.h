@@ -373,6 +373,7 @@ typedef struct
 extern unsigned long long vmxon_ptr;
 extern unsigned long long vmcs_ptr;
 extern SEGMENT_SELECTOR gdtr;
+char* vmx_instruction_errors[];
 
 /************************
  * FUNCTION PROTOTYPES
@@ -403,7 +404,7 @@ extern unsigned int vmx_vmlaunch();
 extern unsigned int vmx_vmxoff();
 extern unsigned int vmx_vmptrld();
 extern unsigned int vmx_vmclear();
-extern unsigned int vmv_vmread(unsigned int field);
-extern void vmv_vmwrite(unsigned int field, unsigned int value);
+extern unsigned int vmx_vmread(unsigned int field);
+extern void vmx_vmwrite(unsigned int field, unsigned int value);
 
 #endif

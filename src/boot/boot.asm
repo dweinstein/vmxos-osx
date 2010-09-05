@@ -125,7 +125,7 @@ pmode:
 	mov	ss, ax
 	mov	es, ax
 	mov gs, ax
-	mov es, ax
+	mov fs, ax
 	mov	esp, 90000h		; stack begins from 90000h
 	
 	jmp 08h:0x1000

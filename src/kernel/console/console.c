@@ -75,8 +75,8 @@ void move_cursor()
 void scroll()
 {
 	unsigned short attrib = (console_backcolour << 4) | (console_forecolour & 0x0F);
-	unsigned short *vidmem = (unsigned short*)0xB8000 + console_w;
-	unsigned short *max = (unsigned short*)0xB8000 + (console_w * (console_h - 1));
+	unsigned short* vidmem = (unsigned short*)0xB8000 + console_w;
+	unsigned short* max = (unsigned short*)0xB8000 + (console_w * (console_h - 1));
 	while(vidmem < max)
 	{
 		*(vidmem) = *(vidmem + console_w);
@@ -94,7 +94,7 @@ void scroll()
 // prints a string on the screen
 void puts(char *message)
 {
-	char *vidmem = (char*)0xB8000 + (cursor_y * console_w + cursor_x) * 2;
+	char* vidmem = (char*)0xB8000 + (cursor_y * console_w + cursor_x) * 2;
 	while(*message)
 	{
 		if (*message == '\n')
@@ -109,7 +109,11 @@ void puts(char *message)
 			cursor_x++;
 			if (cursor_x == console_w) { cursor_x = 0; cursor_y++; }
 		}
-		if (cursor_y == console_h) scroll();
+		if (cursor_y == console_h) 
+		{
+			scroll();
+			vidmem = (char*)0xB8000 + (cursor_y * console_w + cursor_x) * 2;
+		}
 		message++;
 	}
 	move_cursor();
