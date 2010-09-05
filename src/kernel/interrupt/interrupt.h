@@ -71,6 +71,9 @@ typedef struct
      unsigned int base;			            // a pointer to the base of the IDT 
 } __attribute__ ((packed)) IDTR_t;
 
+extern IDTR_t idtr;
+extern IDT_t idt[256];
+
 // interrupt handlers
 void syscall_handler(unsigned int);
 void exception_handler(unsigned int);

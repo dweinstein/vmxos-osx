@@ -124,9 +124,19 @@ pmode:
 	mov	ds, ax
 	mov	ss, ax
 	mov	es, ax
+	mov gs, ax
+	mov es, ax
 	mov	esp, 90000h		; stack begins from 90000h
 	
 	jmp 08h:0x1000
+
+; GDT FORMAT
+; dw 0FFFFh               ; Limit 0xFFFF
+; dw 0                    ; Base 0:15
+; db 0                    ; Base 16:23
+; db 10011010b            ; Present, Ring 0, Code, Non-conforming, Readable
+; db 11001111b            ; Page-granular
+; db 0                    ; Base 24:31
 
 bits 16
 gdt_data: 

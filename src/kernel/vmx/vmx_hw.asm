@@ -173,3 +173,25 @@ _vmx_vmread:
 	mov eax, [esp+4]
 	vmread eax, eax
 	ret
+
+;; VMLAUNCH
+
+global _vmx_vmlaunch
+_vmx_vmlaunch:
+	vmlaunch
+	jbe vmlaunch_failed
+	vmlaunch_pass:
+		mov eax, 1
+		jmp vmlaunch_done
+	vmlaunch_failed:
+		mov eax, 0
+	vmlaunch_done:
+	ret
+
+;; SGDT
+
+extern _gdtr
+global _sgdt
+_sgdt:
+	sgdt [_gdtr]
+	ret

@@ -16,6 +16,10 @@
 #define IA32_VMX_CR4_FIXED0  		0x00000488  	// Capability Reporting Register of CR4 Bits Fixed to Zero. (R/O)
 #define IA32_VMX_CR4_FIXED1  		0x00000489  	// Capability Reporting Register of CR4 Bits Fixed to One. (R/O)
 #define IA32_VMX_VMCS_ENUM  		0x0000048A  	// Capability Reporting Register of VMCS Field Enumeration. (R/O)
+#define IA32_DEBUGCTL				0x000001D9
+#define IA32_SYSENTER_CS			0x00000174
+#define IA32_SYSENTER_ESP           0x00000175
+#define IA32_SYSENTER_EIP           0x00000176
 
 // If CPUID.80000001.EDX.[bit 20] or CPUID.80000001.EDX.[bit29]
 #define IA32_EFER  					0xC0000080  	// Extended Feature Enables.
@@ -355,13 +359,20 @@ typedef struct
 	unsigned int b22_zero		:10;
 } EFLAGS_t;
 
+typedef struct
+{
+  unsigned short limit;
+  unsigned int base;
+} __attribute__ ((packed)) SEGMENT_SELECTOR;
+
+
 /************************
  * GLOBALS VARIABLES
  ************************/
 // vmxon data
 extern unsigned long long vmxon_ptr;
 extern unsigned long long vmcs_ptr;
-
+extern SEGMENT_SELECTOR gdtr;
 
 /************************
  * FUNCTION PROTOTYPES
@@ -369,6 +380,7 @@ extern unsigned long long vmcs_ptr;
 
 // get processor feature flags, ecx of cpuid leaf 1
 void cpuid(CPUID_t*);
+void sgdt();
 
 unsigned int vmx_read_cr0();
 unsigned int vmx_read_cr2();
@@ -387,6 +399,7 @@ void vmx_write_msr(unsigned int msr, unsigned long long* value);
 
 // enter in vmx hypervisor mode, return true if we are in vmx root mode, otherwise false 
 extern unsigned int vmx_vmxon();
+extern unsigned int vmx_vmlaunch();
 extern unsigned int vmx_vmxoff();
 extern unsigned int vmx_vmptrld();
 extern unsigned int vmx_vmclear();
