@@ -157,6 +157,12 @@ char* dec2string(int val)
 {
 	int i = 1, b;
 	char s[32];
+	if (val==0)
+	{
+		dec2string_buffer[0] = '0';
+		dec2string_buffer[1] = 0;
+		return dec2string_buffer;
+	}
 	s[0] = 0;
 	while(val)
 	{

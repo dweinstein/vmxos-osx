@@ -116,137 +116,136 @@ void main()
 	unsigned int u32 = 0;
 	unsigned long long u64 = 0;
 
-// 16-Bit Guest-State Fields
-asm("mov %%es, %0" : "=m" (u16));	vmx_vmwrite(Guest_ES_selector, u16);	puts("ES sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%cs, %0" : "=m" (u16));	vmx_vmwrite(Guest_CS_selector, u16);	puts("CS sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%ss, %0" : "=m" (u16));	vmx_vmwrite(Guest_SS_selector, u16);	puts("SS sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%ds, %0" : "=m" (u16));	vmx_vmwrite(Guest_DS_selector, u16);	puts("DS sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%fs, %0" : "=m" (u16));	vmx_vmwrite(Guest_FS_selector, u16);	puts("FS sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%gs, %0" : "=m" (u16));	vmx_vmwrite(Guest_GS_selector, u16);	puts("GS sel: "); puts(hex2string(u16)); puts("\n");
-asm("sldt %0" : "=m" (u16));		vmx_vmwrite(Guest_LDTR_selector, u16);	puts("LDTR sel: "); puts(hex2string(u16)); puts("\n");
-asm("str %0" : "=m" (u16));			vmx_vmwrite(Guest_TR_selector, u16);	puts("TR sel: "); puts(hex2string(u16)); puts("\n");
+	// 16-Bit Guest-State Fields
+	asm("mov %%es, %0" : "=m" (u16));	vmx_vmwrite(Guest_ES_selector, u16);	puts("ES sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%cs, %0" : "=m" (u16));	vmx_vmwrite(Guest_CS_selector, u16);	puts("CS sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%ss, %0" : "=m" (u16));	vmx_vmwrite(Guest_SS_selector, u16);	puts("SS sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%ds, %0" : "=m" (u16));	vmx_vmwrite(Guest_DS_selector, u16);	puts("DS sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%fs, %0" : "=m" (u16));	vmx_vmwrite(Guest_FS_selector, u16);	puts("FS sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%gs, %0" : "=m" (u16));	vmx_vmwrite(Guest_GS_selector, u16);	puts("GS sel: "); puts(hex2string(u16)); puts("\n");
+	asm("sldt %0" : "=m" (u16));		vmx_vmwrite(Guest_LDTR_selector, u16);	puts("LDTR sel: "); puts(hex2string(u16)); puts("\n");
+	asm("str %0" : "=m" (u16));			vmx_vmwrite(Guest_TR_selector, u16);	puts("TR sel: "); puts(hex2string(u16)); puts("\n");
 
-// 16-Bit Host-State Fields
-asm("mov %%es, %0" : "=m" (u16));	vmx_vmwrite(Host_ES_selector, u16);		puts("ES sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%cs, %0" : "=m" (u16));	vmx_vmwrite(Host_CS_selector, u16);		puts("CS sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%ss, %0" : "=m" (u16));	vmx_vmwrite(Host_SS_selector, u16);		puts("SS sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%ds, %0" : "=m" (u16));	vmx_vmwrite(Host_DS_selector, u16);		puts("DS sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%fs, %0" : "=m" (u16));	vmx_vmwrite(Host_FS_selector, u16);		puts("FS sel: "); puts(hex2string(u16)); puts("\n");
-asm("mov %%gs, %0" : "=m" (u16));	vmx_vmwrite(Host_GS_selector, u16);		puts("GS sel: "); puts(hex2string(u16)); puts("\n");
-asm("str %0" : "=m" (u16));			vmx_vmwrite(Host_TR_selector, u16);		puts("LDTR sel: "); puts(hex2string(u16)); puts("\n");
+	// 16-Bit Host-State Fields
+	asm("mov %%es, %0" : "=m" (u16));	vmx_vmwrite(Host_ES_selector, u16);		puts("ES sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%cs, %0" : "=m" (u16));	vmx_vmwrite(Host_CS_selector, u16);		puts("CS sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%ss, %0" : "=m" (u16));	vmx_vmwrite(Host_SS_selector, u16);		puts("SS sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%ds, %0" : "=m" (u16));	vmx_vmwrite(Host_DS_selector, u16);		puts("DS sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%fs, %0" : "=m" (u16));	vmx_vmwrite(Host_FS_selector, u16);		puts("FS sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%gs, %0" : "=m" (u16));	vmx_vmwrite(Host_GS_selector, u16);		puts("GS sel: "); puts(hex2string(u16)); puts("\n");
+	/*asm("str %0" : "=m" (u16));	*/	vmx_vmwrite(Host_TR_selector, u16);		puts("LDTR sel: "); puts(hex2string(u16)); puts("\n");
 
-// 64-Bit Guest-State Fields
-vmx_vmwrite(VMCS_link_pointer_full, 0xFFFFFFFF);
-vmx_vmwrite(VMCS_link_pointer_high, 0xFFFFFFFF);
+	// 64-Bit Guest-State Fields
+	vmx_vmwrite(VMCS_link_pointer_full, 0xFFFFFFFF);
+	vmx_vmwrite(VMCS_link_pointer_high, 0xFFFFFFFF);
 
-vmx_read_msr(IA32_DEBUGCTL, &u64);
-vmx_vmwrite(Guest_IA32_DEBUGCTL_full, u64);
-vmx_vmwrite(Guest_IA32_DEBUGCTL_high, u64>>32);
-puts("Guest_IA32_DEBUGCTL_full: "); puts(hex2string(u64)); puts("\n");
-puts("Guest_IA32_DEBUGCTL_high: "); puts(hex2string(u64>>32)); puts("\n");
+	vmx_read_msr(IA32_DEBUGCTL, &u64);
+	vmx_vmwrite(Guest_IA32_DEBUGCTL_full, u64);
+	vmx_vmwrite(Guest_IA32_DEBUGCTL_high, u64>>32);
+	puts("Guest_IA32_DEBUGCTL_full: "); puts(hex2string(u64)); puts("\n");
+	puts("Guest_IA32_DEBUGCTL_high: "); puts(hex2string(u64>>32)); puts("\n");
 
-// 32-Bit Control Fields
-vmx_vmwrite(Pin_based_VM_execution_controls, 0x1f);
-vmx_vmwrite(Processor_based_VM_execution_controls,  0x0401E9F2);
-vmx_vmwrite(VM_exit_controls, 0x36dff);
-vmx_vmwrite(VM_entry_controls, 0x11ff);
-vmx_vmwrite(VM_exit_MSR_store_count, 0);
-vmx_vmwrite(VM_exit_MSR_load_count, 0);
-vmx_vmwrite(VM_entry_MSR_load_count, 0);
-vmx_vmwrite(VM_entry_interruption_information_field, 0);
+	// 32-Bit Control Fields
+	vmx_vmwrite(Pin_based_VM_execution_controls, 0x1f);
+	vmx_vmwrite(Processor_based_VM_execution_controls, 0x0401E9F2);
+	vmx_vmwrite(VM_exit_controls, 0x36dff);
+	vmx_vmwrite(VM_entry_controls, 0x11ff);
+	vmx_vmwrite(VM_exit_MSR_store_count, 0);
+	vmx_vmwrite(VM_exit_MSR_load_count, 0);
+	vmx_vmwrite(VM_entry_MSR_load_count, 0);
+	vmx_vmwrite(VM_entry_interruption_information_field, 0);
 
-vmx_vmwrite(TSC_offset_full, 0);
-vmx_vmwrite(TSC_offset_high, 0);
-vmx_vmwrite(Page_fault_error_code_mask, 0);
-vmx_vmwrite(Page_fault_error_code_match, 0);
-vmx_vmwrite(CR3_target_count, 0);
-vmx_vmwrite(CR3_target_value_0, 0);
-vmx_vmwrite(CR3_target_value_1, 0);
-vmx_vmwrite(CR3_target_value_2, 0);
-vmx_vmwrite(CR3_target_value_3, 0);
+	vmx_vmwrite(TSC_offset_full, 0);
+	vmx_vmwrite(TSC_offset_high, 0);
+	vmx_vmwrite(Page_fault_error_code_mask, 0);
+	vmx_vmwrite(Page_fault_error_code_match, 0);
+	vmx_vmwrite(CR3_target_count, 0);
+	vmx_vmwrite(CR3_target_value_0, 0);
+	vmx_vmwrite(CR3_target_value_1, 0);
+	vmx_vmwrite(CR3_target_value_2, 0);
+	vmx_vmwrite(CR3_target_value_3, 0);
 
-// 32-Bit Guest-State Fields
+	// 32-Bit Guest-State Fields
 
-// NB: 3A 2.4.4 On power up or reset of the processor, the base address is set to the 
-// default value of 0 and the limit is set to 0FFFFH.
-vmx_vmwrite(Guest_CS_limit, 0xFFFF);
-vmx_vmwrite(Guest_ES_limit, 0xFFFF);
-vmx_vmwrite(Guest_SS_limit, 0xFFFF);
-vmx_vmwrite(Guest_DS_limit, 0xFFFF);
-vmx_vmwrite(Guest_FS_limit, 0xFFFF);
-vmx_vmwrite(Guest_GS_limit, 0xFFFF);
-vmx_vmwrite(Guest_LDTR_limit, 0xFFFF);
-vmx_vmwrite(Guest_TR_limit, 0xFFFF);
+	// NB: 3A 2.4.4 On power up or reset of the processor, the base address is set to the 
+	// default value of 0 and the limit is set to 0FFFFH.
+	vmx_vmwrite(Guest_CS_limit, 0xFFFF);
+	vmx_vmwrite(Guest_ES_limit, 0xFFFF);
+	vmx_vmwrite(Guest_SS_limit, 0xFFFF);
+	vmx_vmwrite(Guest_DS_limit, 0xFFFF);
+	vmx_vmwrite(Guest_FS_limit, 0xFFFF);
+	vmx_vmwrite(Guest_GS_limit, 0xFFFF);
+	vmx_vmwrite(Guest_LDTR_limit, 0xFFFF);
+	vmx_vmwrite(Guest_TR_limit, 0xFFFF);
 
-vmx_vmwrite(Guest_GDTR_limit, gdtr.limit);
-vmx_vmwrite(Guest_IDTR_limit, idtr.limit);
+	vmx_vmwrite(Guest_GDTR_limit, gdtr.limit);
+	vmx_vmwrite(Guest_IDTR_limit, idtr.limit);
 
-vmx_vmwrite(Guest_DR7, 0x400);
+	vmx_vmwrite(Guest_DR7, 0x400);
 
-vmx_vmwrite(Guest_interruptibility_state, 0);
-vmx_vmwrite(Guest_activity_state, 0);
+	vmx_vmwrite(Guest_interruptibility_state, 0);
+	vmx_vmwrite(Guest_activity_state, 0);
 
-vmx_vmwrite(Guest_CS_access_rights, 0x9A);
-vmx_vmwrite(Guest_ES_access_rights, 0x92);
-vmx_vmwrite(Guest_SS_access_rights, 0x92);
-vmx_vmwrite(Guest_DS_access_rights, 0x92);
-vmx_vmwrite(Guest_FS_access_rights, 0x92);
-vmx_vmwrite(Guest_GS_access_rights, 0x92);
-vmx_vmwrite(Guest_LDTR_access_rights, 0);
-vmx_vmwrite(Guest_TR_access_rights, 0);
+	vmx_vmwrite(Guest_CS_access_rights, 0x9A);
+	vmx_vmwrite(Guest_ES_access_rights, 0x92);
+	vmx_vmwrite(Guest_SS_access_rights, 0x92);
+	vmx_vmwrite(Guest_DS_access_rights, 0x92);
+	vmx_vmwrite(Guest_FS_access_rights, 0x92);
+	vmx_vmwrite(Guest_GS_access_rights, 0x92);
+	vmx_vmwrite(Guest_LDTR_access_rights, 0);
+	vmx_vmwrite(Guest_TR_access_rights, 0);
 
-// Natural-Width Guest-State Fields
-vmx_read_msr(IA32_SYSENTER_CS, &u64);
-vmx_vmwrite(Guest_IA32_SYSENTER_CS, u64);
+	// Natural-Width Guest-State Fields
+	vmx_read_msr(IA32_SYSENTER_CS, &u64);
+	vmx_vmwrite(Guest_IA32_SYSENTER_CS, u64);
 
-vmx_vmwrite(Guest_CR0, vmx_read_cr0());
-vmx_vmwrite(Guest_CR3, vmx_read_cr3());
-vmx_vmwrite(Guest_CR4, vmx_read_cr4());
+	vmx_vmwrite(Guest_CR0, vmx_read_cr0());
+	vmx_vmwrite(Guest_CR3, vmx_read_cr3());
+	vmx_vmwrite(Guest_CR4, vmx_read_cr4());
 
-vmx_vmwrite(Guest_ES_base, 0);
-vmx_vmwrite(Guest_CS_base, 0);
-vmx_vmwrite(Guest_SS_base, 0);
-vmx_vmwrite(Guest_DS_base, 0);
-vmx_vmwrite(Guest_FS_base, 0);
-vmx_vmwrite(Guest_GS_base, 0);
-vmx_vmwrite(Guest_LDTR_base, 0);
-vmx_vmwrite(Guest_TR_base, 0);
+	vmx_vmwrite(Guest_ES_base, 0);
+	vmx_vmwrite(Guest_CS_base, 0);
+	vmx_vmwrite(Guest_SS_base, 0);
+	vmx_vmwrite(Guest_DS_base, 0);
+	vmx_vmwrite(Guest_FS_base, 0);
+	vmx_vmwrite(Guest_GS_base, 0);
+	vmx_vmwrite(Guest_LDTR_base, 0);
+	vmx_vmwrite(Guest_TR_base, 0);
 
-vmx_vmwrite(Guest_GDTR_base, gdtr.base);
-vmx_vmwrite(Guest_IDTR_base, idtr.base);
+	vmx_vmwrite(Guest_GDTR_base, gdtr.base);
+	vmx_vmwrite(Guest_IDTR_base, idtr.base);
 
-UINT(eflags) = vmx_read_eflags();
-vmx_vmwrite(Guest_RFLAGS, UINT(eflags));
+	UINT(eflags) = vmx_read_eflags();
+	vmx_vmwrite(Guest_RFLAGS, UINT(eflags));
 
-vmx_read_msr(IA32_SYSENTER_ESP, &u64);
-vmx_vmwrite(Guest_IA32_SYSENTER_ESP, u64);
-vmx_read_msr(IA32_SYSENTER_EIP, &u64);
-vmx_vmwrite(Guest_IA32_SYSENTER_EIP, u64);
+	vmx_read_msr(IA32_SYSENTER_ESP, &u64);
+	vmx_vmwrite(Guest_IA32_SYSENTER_ESP, u64);
+	vmx_read_msr(IA32_SYSENTER_EIP, &u64);
+	vmx_vmwrite(Guest_IA32_SYSENTER_EIP, u64);
 
+	// Natural-Width Host-State Fields
+	vmx_vmwrite(Host_CR0, vmx_read_cr0());
+	vmx_vmwrite(Host_CR3, vmx_read_cr3());
+	vmx_vmwrite(Host_CR4, vmx_read_cr4());
 
-// Natural-Width Host-State Fields
-vmx_vmwrite(Host_CR0, vmx_read_cr0());
-vmx_vmwrite(Host_CR3, vmx_read_cr3());
-vmx_vmwrite(Host_CR4, vmx_read_cr4());
+	vmx_vmwrite(Host_FS_base, 0);
+	vmx_vmwrite(Host_GS_base, 0);
+	vmx_vmwrite(Host_TR_base, 0);
+	vmx_vmwrite(Host_GDTR_base, gdtr.base);
+	vmx_vmwrite(Host_IDTR_base, idtr.base);
 
-vmx_vmwrite(Host_FS_base, 0);
-vmx_vmwrite(Host_GS_base, 0);
-vmx_vmwrite(Host_TR_base, 0);
-vmx_vmwrite(Host_GDTR_base, gdtr.base);
-vmx_vmwrite(Host_IDTR_base, idtr.base);
+	vmx_read_msr(IA32_SYSENTER_ESP, &u64);
+	vmx_vmwrite(Host_IA32_SYSENTER_ESP, u64);
+	vmx_read_msr(IA32_SYSENTER_EIP, &u64);
+	vmx_vmwrite(Host_IA32_SYSENTER_EIP, u64);
+	vmx_read_msr(IA32_SYSENTER_CS, &u64);
+	vmx_vmwrite(Host_IA32_SYSENTER_CS, u64);
 
-vmx_read_msr(IA32_SYSENTER_ESP, &u64);
-vmx_vmwrite(Host_IA32_SYSENTER_ESP, u64);
-vmx_read_msr(IA32_SYSENTER_EIP, &u64);
-vmx_vmwrite(Host_IA32_SYSENTER_EIP, u64);
-vmx_read_msr(IA32_SYSENTER_CS, &u64);
-vmx_vmwrite(Host_IA32_SYSENTER_CS, u64);
+	vmx_vmwrite(Guest_RSP, 0x90000);
+	vmx_vmwrite(Guest_RIP, guest_entry);
 
-vmx_vmwrite(Guest_RSP, 0x80000);
-vmx_vmwrite(Guest_RIP, guest_entry);
-
-vmx_vmwrite(Host_RSP, 0x90000);
-vmx_vmwrite(Host_RIP, host_entry);
+	vmx_vmwrite(Host_RSP, 0x90000);
+	vmx_vmwrite(Host_RIP, host_entry);
 
 	if (!vmx_vmlaunch())
 	{
@@ -270,7 +269,14 @@ void guest_entry()
 
 void host_entry()
 {
-	puts("back to the host");
+	VM_EXIT_REASON_t er;
+	UINT(er) = vmx_vmread(Exit_reason);
+	puts("VM_EXIT: back to the host.. finally!\n");
+	puts("Exit reason:\n");
+	puts("- Basic exit reason: "); puts(vmx_exit_reasons[er.b0015_Basic_exit_reason]); puts("\n");
+	puts("- Pending MTF VM exit: "); puts(dec2string(er.b28_Pending_MTF_VM_exit)); puts("\n");
+	puts("- VM exit from VMX root operation: "); puts(dec2string(er.b29_VM_exit_from_VMX_root_operation)); puts("\n");
+	puts("- VM-entry failure: "); puts(dec2string(er.b31_VM_entry_failure)); puts("\n");
 	sti();
 	hlt();
 }

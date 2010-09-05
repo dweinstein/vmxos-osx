@@ -359,6 +359,17 @@ typedef struct
 	unsigned int b22_zero		:10;
 } EFLAGS_t;
 
+// vm-exit reason
+typedef struct
+{
+	unsigned int b0015_Basic_exit_reason				:16;
+	unsigned int b2716_Reserved_zeros					:12;
+	unsigned int b28_Pending_MTF_VM_exit				:1;
+	unsigned int b29_VM_exit_from_VMX_root_operation	:1;
+	unsigned int b30_Reserved_zeros						:1;
+	unsigned int b31_VM_entry_failure					:1;
+} VM_EXIT_REASON_t;
+
 typedef struct
 {
   unsigned short limit;
@@ -374,6 +385,7 @@ extern unsigned long long vmxon_ptr;
 extern unsigned long long vmcs_ptr;
 extern SEGMENT_SELECTOR gdtr;
 char* vmx_instruction_errors[];
+char* vmx_exit_reasons[];
 
 /************************
  * FUNCTION PROTOTYPES
