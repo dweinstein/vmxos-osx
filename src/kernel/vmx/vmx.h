@@ -394,6 +394,7 @@ char* vmx_exit_reasons[];
 // get processor feature flags, ecx of cpuid leaf 1
 void cpuid(CPUID_t*);
 void sgdt();
+void sidt();
 
 unsigned int vmx_read_cr0();
 unsigned int vmx_read_cr2();

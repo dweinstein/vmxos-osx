@@ -1,4 +1,9 @@
 bits 32
+jmp start
+
+global _break_point
+_break_point:
+	ret
 
 extern _main
 global start

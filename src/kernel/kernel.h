@@ -7,4 +7,7 @@
 // hlt defined in start.asm
 extern void hlt();
 
+// jump to a known linear address to let bochs interrupt and debug
+extern void break_point();
+
 #endif

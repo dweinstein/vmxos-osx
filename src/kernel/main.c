@@ -107,33 +107,28 @@ void main()
 	puts("Clearing VMCS region "); puts(vmx_vmclear() ? "success\n" : "failed\n");
 	puts("Loading VMCS pointer "); puts(vmx_vmptrld() ? "success\n" : "failed\n");
 
+	break_point();
 	sgdt();
-	puts("GDTR base: "); puts(hex2string(gdtr.base)); puts("\n");
+	puts("GDTR base : "); puts(hex2string(gdtr.base)); puts("\n");
 	puts("GDTR limit: "); puts(hex2string(gdtr.limit)); puts("\n");
+	//sidt();
+	puts("IDTR base : "); puts(hex2string(idtr.base)); puts("\n");
+	puts("IDTR limit: "); puts(hex2string(idtr.limit)); puts("\n");
+	puts("IDT vector: "); puts(hex2string(&idt)); puts("\n");
 
 	unsigned char u8 = 0;
 	unsigned short u16 = 0;
 	unsigned int u32 = 0;
 	unsigned long long u64 = 0;
 
-	// 16-Bit Guest-State Fields
-	asm("mov %%es, %0" : "=m" (u16));	vmx_vmwrite(Guest_ES_selector, u16);	puts("ES sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%cs, %0" : "=m" (u16));	vmx_vmwrite(Guest_CS_selector, u16);	puts("CS sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%ss, %0" : "=m" (u16));	vmx_vmwrite(Guest_SS_selector, u16);	puts("SS sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%ds, %0" : "=m" (u16));	vmx_vmwrite(Guest_DS_selector, u16);	puts("DS sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%fs, %0" : "=m" (u16));	vmx_vmwrite(Guest_FS_selector, u16);	puts("FS sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%gs, %0" : "=m" (u16));	vmx_vmwrite(Guest_GS_selector, u16);	puts("GS sel: "); puts(hex2string(u16)); puts("\n");
-	asm("sldt %0" : "=m" (u16));		vmx_vmwrite(Guest_LDTR_selector, u16);	puts("LDTR sel: "); puts(hex2string(u16)); puts("\n");
-	asm("str %0" : "=m" (u16));			vmx_vmwrite(Guest_TR_selector, u16);	puts("TR sel: "); puts(hex2string(u16)); puts("\n");
-
 	// 16-Bit Host-State Fields
-	asm("mov %%es, %0" : "=m" (u16));	vmx_vmwrite(Host_ES_selector, u16);		puts("ES sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%cs, %0" : "=m" (u16));	vmx_vmwrite(Host_CS_selector, u16);		puts("CS sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%ss, %0" : "=m" (u16));	vmx_vmwrite(Host_SS_selector, u16);		puts("SS sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%ds, %0" : "=m" (u16));	vmx_vmwrite(Host_DS_selector, u16);		puts("DS sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%fs, %0" : "=m" (u16));	vmx_vmwrite(Host_FS_selector, u16);		puts("FS sel: "); puts(hex2string(u16)); puts("\n");
-	asm("mov %%gs, %0" : "=m" (u16));	vmx_vmwrite(Host_GS_selector, u16);		puts("GS sel: "); puts(hex2string(u16)); puts("\n");
-	/*asm("str %0" : "=m" (u16));	*/	vmx_vmwrite(Host_TR_selector, u16);		puts("LDTR sel: "); puts(hex2string(u16)); puts("\n");
+	asm("mov %%es, %0" : "=m" (u16));	vmx_vmwrite(Host_ES_selector, u16);
+	asm("mov %%cs, %0" : "=m" (u16));	vmx_vmwrite(Host_CS_selector, u16);
+	asm("mov %%ss, %0" : "=m" (u16));	vmx_vmwrite(Host_SS_selector, 0x18);
+	asm("mov %%ds, %0" : "=m" (u16));	vmx_vmwrite(Host_DS_selector, u16);
+	asm("mov %%fs, %0" : "=m" (u16));	vmx_vmwrite(Host_FS_selector, u16);
+	asm("mov %%gs, %0" : "=m" (u16));	vmx_vmwrite(Host_GS_selector, u16);
+	/*asm("str %0" : "=m" (u16));	*/	vmx_vmwrite(Host_TR_selector, 0x18);
 
 	// 64-Bit Guest-State Fields
 	vmx_vmwrite(VMCS_link_pointer_full, 0xFFFFFFFF);
@@ -165,18 +160,28 @@ void main()
 	vmx_vmwrite(CR3_target_value_2, 0);
 	vmx_vmwrite(CR3_target_value_3, 0);
 
+	// 16-Bit Guest-State Fields
+	asm("mov %%es, %0" : "=m" (u16));	vmx_vmwrite(Guest_ES_selector, u16);
+	asm("mov %%cs, %0" : "=m" (u16));	vmx_vmwrite(Guest_CS_selector, u16);
+	asm("mov %%ss, %0" : "=m" (u16));	vmx_vmwrite(Guest_SS_selector, 0x18);
+	asm("mov %%ds, %0" : "=m" (u16));	vmx_vmwrite(Guest_DS_selector, u16);
+	asm("mov %%fs, %0" : "=m" (u16));	vmx_vmwrite(Guest_FS_selector, u16);
+	asm("mov %%gs, %0" : "=m" (u16));	vmx_vmwrite(Guest_GS_selector, u16);
+	asm("sldt %0" : "=m" (u16));		vmx_vmwrite(Guest_LDTR_selector, u16);
+	asm("str %0" : "=m" (u16));			vmx_vmwrite(Guest_TR_selector, 0x18);
+
 	// 32-Bit Guest-State Fields
 
 	// NB: 3A 2.4.4 On power up or reset of the processor, the base address is set to the 
 	// default value of 0 and the limit is set to 0FFFFH.
-	vmx_vmwrite(Guest_CS_limit, 0xFFFF);
-	vmx_vmwrite(Guest_ES_limit, 0xFFFF);
-	vmx_vmwrite(Guest_SS_limit, 0xFFFF);
-	vmx_vmwrite(Guest_DS_limit, 0xFFFF);
-	vmx_vmwrite(Guest_FS_limit, 0xFFFF);
-	vmx_vmwrite(Guest_GS_limit, 0xFFFF);
+	vmx_vmwrite(Guest_CS_limit, 0xffffffff);
+	vmx_vmwrite(Guest_ES_limit, 0xffffffff);
+	vmx_vmwrite(Guest_SS_limit, 0xffffffff);
+	vmx_vmwrite(Guest_DS_limit, 0xffffffff);
+	vmx_vmwrite(Guest_FS_limit, 0xffffffff);
+	vmx_vmwrite(Guest_GS_limit, 0xffffffff);
 	vmx_vmwrite(Guest_LDTR_limit, 0xFFFF);
-	vmx_vmwrite(Guest_TR_limit, 0xFFFF);
+	vmx_vmwrite(Guest_TR_limit, 0xFF);
 
 	vmx_vmwrite(Guest_GDTR_limit, gdtr.limit);
 	vmx_vmwrite(Guest_IDTR_limit, idtr.limit);
@@ -192,8 +197,8 @@ void main()
 	vmx_vmwrite(Guest_DS_access_rights, 0x92);
 	vmx_vmwrite(Guest_FS_access_rights, 0x92);
 	vmx_vmwrite(Guest_GS_access_rights, 0x92);
-	vmx_vmwrite(Guest_LDTR_access_rights, 0);
-	vmx_vmwrite(Guest_TR_access_rights, 0);
+	vmx_vmwrite(Guest_LDTR_access_rights, 0x00010000);
+	vmx_vmwrite(Guest_TR_access_rights, 0x8b);
 
 	// Natural-Width Guest-State Fields
 	vmx_read_msr(IA32_SYSENTER_CS, &u64);
@@ -241,6 +246,8 @@ void main()
 	vmx_read_msr(IA32_SYSENTER_CS, &u64);
 	vmx_vmwrite(Host_IA32_SYSENTER_CS, u64);
 
+	vmx_vmwrite(Exception_bitmap, 0xdeadfeef);
+
 	vmx_vmwrite(Guest_RSP, 0x90000);
 	vmx_vmwrite(Guest_RIP, guest_entry);
 
@@ -278,5 +285,6 @@ void host_entry()
 	puts("- VM exit from VMX root operation: "); puts(dec2string(er.b29_VM_exit_from_VMX_root_operation)); puts("\n");
 	puts("- VM-entry failure: "); puts(dec2string(er.b31_VM_entry_failure)); puts("\n");
 	sti();
-	hlt();
+	//hlt();
+	while(1);
 }
