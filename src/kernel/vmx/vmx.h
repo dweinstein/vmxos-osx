@@ -414,6 +414,7 @@ void vmx_write_msr(unsigned int msr, unsigned long long* value);
 // enter in vmx hypervisor mode, return true if we are in vmx root mode, otherwise false 
 extern unsigned int vmx_vmxon();
 extern unsigned int vmx_vmlaunch();
+extern unsigned int vmx_vmresume();
 extern unsigned int vmx_vmxoff();
 extern unsigned int vmx_vmptrld();
 extern unsigned int vmx_vmclear();

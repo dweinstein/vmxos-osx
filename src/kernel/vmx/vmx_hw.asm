@@ -188,6 +188,20 @@ _vmx_vmlaunch:
 	vmlaunch_done:
 	ret
 
+;; VMRESUME
+
+global _vmx_vmresume
+_vmx_vmresume:
+	vmresume
+	jbe vmresume_failed
+	vmresume_pass:
+		mov eax, 1
+		jmp vmresume_done
+	vmresume_failed:
+		mov eax, 0
+	vmresume_done:
+	ret
+
 ;; SGDT
 
 extern _gdtr
