@@ -168,7 +168,7 @@ void main()
 	asm("mov %%fs, %0" : "=m" (u16));	vmx_vmwrite(Guest_FS_selector, u16);
 	asm("mov %%gs, %0" : "=m" (u16));	vmx_vmwrite(Guest_GS_selector, u16);
 	asm("sldt %0" : "=m" (u16));		vmx_vmwrite(Guest_LDTR_selector, u16);
-	asm("str %0" : "=m" (u16));			vmx_vmwrite(Guest_TR_selector, 0x18);
+	/*asm("str %0" : "=m" (u16));*/		vmx_vmwrite(Guest_TR_selector, 0x18);
 
 	// 32-Bit Guest-State Fields
 
@@ -191,12 +191,12 @@ void main()
 	vmx_vmwrite(Guest_interruptibility_state, 0);
 	vmx_vmwrite(Guest_activity_state, 0);
 
-	vmx_vmwrite(Guest_CS_access_rights, 0x9A);
-	vmx_vmwrite(Guest_ES_access_rights, 0x92);
-	vmx_vmwrite(Guest_SS_access_rights, 0x92);
-	vmx_vmwrite(Guest_DS_access_rights, 0x92);
-	vmx_vmwrite(Guest_FS_access_rights, 0x92);
-	vmx_vmwrite(Guest_GS_access_rights, 0x92);
+	vmx_vmwrite(Guest_CS_access_rights, 0xC09B);
+	vmx_vmwrite(Guest_ES_access_rights, 0xC093);
+	vmx_vmwrite(Guest_SS_access_rights, 0xC093);
+	vmx_vmwrite(Guest_DS_access_rights, 0xC093);
+	vmx_vmwrite(Guest_FS_access_rights, 0xC093);
+	vmx_vmwrite(Guest_GS_access_rights, 0xC093);
 	vmx_vmwrite(Guest_LDTR_access_rights, 0x00010000);
 	vmx_vmwrite(Guest_TR_access_rights, 0x8b);
 
@@ -239,15 +239,6 @@ void main()
 	vmx_vmwrite(Host_GDTR_base, gdtr.base);
 	vmx_vmwrite(Host_IDTR_base, idtr.base);
 
-	vmx_read_msr(IA32_SYSENTER_ESP, &u64);
-	vmx_vmwrite(Host_IA32_SYSENTER_ESP, u64);
-	vmx_read_msr(IA32_SYSENTER_EIP, &u64);
-	vmx_vmwrite(Host_IA32_SYSENTER_EIP, u64);
-	vmx_read_msr(IA32_SYSENTER_CS, &u64);
-	vmx_vmwrite(Host_IA32_SYSENTER_CS, u64);
-
-	vmx_vmwrite(Exception_bitmap, 0xdeadfeef);
-
 	vmx_vmwrite(Guest_RSP, 0x90000);
 	vmx_vmwrite(Guest_RIP, guest_entry);
 
@@ -270,7 +261,7 @@ void main()
 
 void guest_entry()
 {
-	puts("inside guest");
+	puts("VM_ENTER: inside guest\n");
 	hlt();
 }
 

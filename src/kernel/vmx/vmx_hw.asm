@@ -195,7 +195,8 @@ global _sgdt
 _sgdt:
 	sgdt [_gdtr]
 	ret
-;; SGDT
+
+;; SIDT
 
 extern _idtr
 global _sidt

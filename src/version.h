@@ -1,7 +1,7 @@
 #ifndef _VERSION_H_
 #define _VERSION_H_
 
-char* vmxos_version = "v0.1.279 06/09/2010 11:00";
+char* vmxos_version = "v0.1.287 10/09/2010 13:30";
 
 #endif
 
