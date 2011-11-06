@@ -1,0 +1,11 @@
+*vmxos-osx*
+
+Original author: omarator~at~gmaildotcom
+Original project URL: https://code.google.com/p/vmxos/
+Original project description:
+The project is made to have a native vmx support based on a simple operating
+system. This is just a series of experiments to learn more on hardware
+virtualizzation support, with a focus on Intel vmx. 
+
+Started porting for OS X by: daemonize~at~gmaildot.com
+
