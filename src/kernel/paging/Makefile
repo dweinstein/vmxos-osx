@@ -1,7 +1,7 @@
 all: paging.o
 
 paging.o: paging.c paging.h ../vmx/vmx.h ../kernel.h
-	gcc -ffreestanding -fno-builtin -nostdlib -o paging.o -c paging.c
+	gcc -m32 -ffreestanding -fno-builtin -nostdlib -o paging.o -c paging.c
 
 clean:
-	del *.o
+	rm -f *.o
